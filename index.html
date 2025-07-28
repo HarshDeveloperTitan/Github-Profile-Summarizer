@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Centered Form</title>
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(215, 124, 11);
+        gap: 200px;
+      }
+
+      .container {
+        padding: 50px;
+        height: 80vh;
+        width: 80vh;
+        background-color: antiquewhite;
+        color: black;
+        box-sizing: border-box;
+        border-radius: 30px;
+        border: 5px solid black;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      label,
+      input,
+      button {
+        font-size: 1rem;
+      }
+
+      input {
+        padding: 10px;
+      }
+
+      button {
+        padding: 10px;
+        background-color: white;
+        color: black;
+        border: 2px solid black;
+        cursor: pointer;
+      }
+      .output {
+        margin: 70px 0;
+      }
+      .photo {
+        margin: 30px;
+      }
+      .photo img {
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Github Profile Summarizer</h1>
+    <div class="container">
+      <div>
+        <label for="profile">Github Profile Name: </label>
+        <input type="text" name="profile" id="profile" /><span
+          ><button onclick="getUser()">Submit</button></span
+        >
+      </div>
+
+      <div class="output">
+        <p>Name: <span id="name"></span></p>
+      </div>
+      <div class="output">
+        <p>Public Repository: <span id="repos"></span></p>
+      </div>
+      <div class="output">
+        <p>Followers: <span id="followers"></span></p>
+      </div>
+      <div class="output">
+        <p>Following: <span id="following"></span></p>
+      </div>
+    </div>
+    <script>
+      async function getUser() {
+        let username = document.getElementById("profile").value;
+
+        if (username === "") {
+          alert("Please enter a username");
+        }
+        try {
+          const response = await fetch(
+            `https://api.github.com/users/${username}`
+          );
+
+          if (!response.ok) {
+            throw new Error("User not found");
+          }
+          const data = await response.json();
+          console.log(data);
+          console.log(data.name);
+          document.getElementById("name").innerText = data.name;
+          document.getElementById("followers").innerText = data.followers;
+          document.getElementById("repos").innerText = data.public_repos;
+          document.getElementById("following").innerText = data.following;
+        } catch (err) {
+          document.getElementById("name").innerText = "User not found!";
+        }
+      }
+    </script>
+  </body>
+</html>
